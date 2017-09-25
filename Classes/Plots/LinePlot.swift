@@ -69,6 +69,9 @@ open class LinePlot : Plot {
     /// If fillType is set to .Gradient, then this defines whether the gradient is rendered as a linear gradient or radial gradient.
     open var fillGradientType = ScrollableGraphViewGradientType.linear
     
+    /// Rotate the gradient colors. Can be from 0.0 to 360.0.
+    open var fillGradientAngle = 0.0
+    
     // Private State
     // #############
     
@@ -110,6 +113,7 @@ open class LinePlot : Plot {
                     colors.append(fillGradientColors[location]!)
                 })
                 gradientLayer = GradientDrawingLayer(frame: viewport, colors: colors, locations: locations, gradientType: fillGradientType, lineDrawingLayer: lineLayer!)
+                gradientLayer?.gradientAngle = fillGradientAngle
             }
         }
         
