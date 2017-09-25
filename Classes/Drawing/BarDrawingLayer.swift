@@ -4,17 +4,16 @@ import UIKit
 // MARK: Drawing the bars
 internal class BarDrawingLayer: ScrollableGraphViewDrawingLayer {
     
-    private var barPath = UIBezierPath()
-    private var barWidth: CGFloat = 4
-    private var shouldRoundCorners = false
+    private(set) var barPath = UIBezierPath()
+    private(set) var barWidth: CGFloat = 4
+    private(set) var shouldRoundCorners = false
     
-    init(frame: CGRect, barWidth: CGFloat, barColor: UIColor, barLineWidth: CGFloat, barLineColor: UIColor, shouldRoundCorners: Bool) {
+    init(frame: CGRect, barWidth: CGFloat, barLineWidth: CGFloat, barLineColor: UIColor, shouldRoundCorners: Bool) {
         super.init(viewportWidth: frame.size.width, viewportHeight: frame.size.height)
         
         self.barWidth = barWidth
         self.lineWidth = barLineWidth
         self.strokeColor = barLineColor.cgColor
-        self.fillColor = barColor.cgColor
         self.shouldRoundCorners = shouldRoundCorners
         
         self.lineJoin = lineJoin
@@ -70,8 +69,11 @@ internal class BarDrawingLayer: ScrollableGraphViewDrawingLayer {
         return barPath
     }
     
+    override func createBezierPath() -> UIBezierPath {
+        return createPath()
+    }
+    
     override func updatePath() {
-        
-        self.path = createPath ().cgPath
+        self.path = createBezierPath().cgPath
     }
 }

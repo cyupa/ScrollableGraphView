@@ -54,11 +54,8 @@ open class LinePlot : Plot {
     /// If fillType is set to .Solid then this colour will be used to fill the graph.
     open var fillColor: UIColor = UIColor.black
     
-    /// If fillType is set to .Gradient then this will be the starting colour for the gradient.
-    open var fillGradientStartColor: UIColor = UIColor.white
-    
-    /// If fillType is set to .Gradient, then this will be the ending colour for the gradient.
-    open var fillGradientEndColor: UIColor = UIColor.black
+    /// If fillType is set to .Gradient then this will be the colours by the locations for the gradient.
+    open var fillGradientColors: [CGFloat : UIColor] = [0.0 : UIColor.white, 1.0 : UIColor.black]
     
     open var fillGradientType_: Int {
         get { return fillGradientType.rawValue }
@@ -71,6 +68,9 @@ open class LinePlot : Plot {
     
     /// If fillType is set to .Gradient, then this defines whether the gradient is rendered as a linear gradient or radial gradient.
     open var fillGradientType = ScrollableGraphViewGradientType.linear
+    
+    /// Rotate the gradient colors. Can be from 0.0 to 360.0.
+    open var fillGradientAngle = 0.0
     
     // Private State
     // #############
@@ -102,12 +102,17 @@ open class LinePlot : Plot {
         case .solid:
             if(shouldFill) {
                 // Setup fill
-                fillLayer = FillDrawingLayer(frame: viewport, fillColor: fillColor, lineDrawingLayer: lineLayer!)
+                fillLayer = FillDrawingLayer(frame: viewport, fillColor: fillColor, drawingLayer: lineLayer!)
             }
             
         case .gradient:
             if(shouldFill) {
-                gradientLayer = GradientDrawingLayer(frame: viewport, startColor: fillGradientStartColor, endColor: fillGradientEndColor, gradientType: fillGradientType, lineDrawingLayer: lineLayer!)
+                let locations = fillGradientColors.keys.sorted()
+                var colors: [UIColor] = []
+                locations.forEach({ (location) in
+                    colors.append(fillGradientColors[location]!)
+                })
+                gradientLayer = GradientDrawingLayer(frame: viewport, colors: colors, locations: locations, gradientType: fillGradientType, gradientAngle: fillGradientAngle, drawingLayer: lineLayer!)
             }
         }
         
@@ -120,14 +125,4 @@ open class LinePlot : Plot {
 @objc public enum ScrollableGraphViewLineStyle : Int {
     case straight
     case smooth
-}
-
-@objc public enum ScrollableGraphViewFillType : Int {
-    case solid
-    case gradient
-}
-
-@objc public enum ScrollableGraphViewGradientType : Int {
-    case linear
-    case radial
 }

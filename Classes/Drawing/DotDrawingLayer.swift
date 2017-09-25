@@ -3,9 +3,9 @@ import UIKit
 
 internal class DotDrawingLayer: ScrollableGraphViewDrawingLayer {
     
-    private var dataPointPath = UIBezierPath()
-    private var dataPointSize: CGFloat = 5
-    private var dataPointType: ScrollableGraphViewDataPointType = .circle
+    private(set) var dataPointPath = UIBezierPath()
+    private(set) var dataPointSize: CGFloat = 5
+    private(set) var dataPointType: ScrollableGraphViewDataPointType = .circle
     
     private var customDataPointPath: ((_ centre: CGPoint) -> UIBezierPath)?
     
@@ -95,7 +95,11 @@ internal class DotDrawingLayer: ScrollableGraphViewDrawingLayer {
         }
     }
     
+    override func createBezierPath() -> UIBezierPath {
+        return createDataPointPath()
+    }
+    
     override func updatePath() {
-        self.path = createDataPointPath().cgPath
+        self.path = createBezierPath().cgPath
     }
 }

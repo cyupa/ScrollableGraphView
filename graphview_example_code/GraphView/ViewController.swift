@@ -16,17 +16,17 @@ class ViewController: UIViewController, ScrollableGraphViewDataSource {
     
     // Data for the different plots
     
-    var numberOfDataItems = 29
+    var numberOfDataItems = 36500
     
     // Data for graphs with a single plot
     lazy var simpleLinePlotData: [Double] = self.generateRandomData(self.numberOfDataItems, max: 100, shouldIncludeOutliers: false)
-    lazy var darkLinePlotData: [Double] = self.generateRandomData(self.numberOfDataItems, max: 50, shouldIncludeOutliers: true)
+    lazy var darkLinePlotData: [Double] = self.generateRandomData(self.numberOfDataItems, max: 50, shouldIncludeOutliers: false)
     lazy var dotPlotData: [Double] =  self.generateRandomData(self.numberOfDataItems, variance: 4, from: 25)
     lazy var barPlotData: [Double] =  self.generateRandomData(self.numberOfDataItems, max: 100, shouldIncludeOutliers: false)
     lazy var pinkLinePlotData: [Double] =  self.generateRandomData(self.numberOfDataItems, max: 100, shouldIncludeOutliers: false)
     
     // Data for graphs with multiple plots
-    lazy var blueLinePlotData: [Double] = self.generateRandomData(self.numberOfDataItems, max: 50)
+    lazy var blueLinePlotData: [Double] = self.generateRandomData(self.numberOfDataItems, max: 50, shouldIncludeOutliers: false)
     lazy var orangeLinePlotData: [Double] =  self.generateRandomData(self.numberOfDataItems, max: 40, shouldIncludeOutliers: false)
 
     // Labels for the x-axis
@@ -89,9 +89,21 @@ class ViewController: UIViewController, ScrollableGraphViewDataSource {
         }
     }
     
-    func label(atIndex pointIndex: Int) -> String {
+    func xLabel(atIndex pointIndex: Int) -> String {
         // Ensure that you have a label to return for the index
         return xAxisLabels[pointIndex]
+    }
+    
+    func yLabel(forPlot plot: Plot, atIndex pointIndex: Int) -> NSAttributedString? {
+        return NSAttributedString(string: String(self.value(forPlot: plot, atIndex: pointIndex)))
+    }
+    
+    func yLabelOffset(forPlot plot: Plot) -> UIOffset? {
+        return nil
+    }
+    
+    func yLabelTransformAngle(forPlot plot: Plot) -> CGFloat? {
+        return 270
     }
     
     func numberOfPoints() -> Int {
@@ -252,52 +264,53 @@ class ViewController: UIViewController, ScrollableGraphViewDataSource {
         // Setup the line plot.
         let linePlot = LinePlot(identifier: "darkLine")
         
-        linePlot.lineWidth = 1
-        linePlot.lineColor = UIColor.colorFromHex(hexString: "#777777")
+        linePlot.lineWidth = 0
+        linePlot.lineColor = UIColor.clear
         linePlot.lineStyle = ScrollableGraphViewLineStyle.smooth
+        linePlot.lineCurviness = 0.6
         
         linePlot.shouldFill = true
         linePlot.fillType = ScrollableGraphViewFillType.gradient
         linePlot.fillGradientType = ScrollableGraphViewGradientType.linear
-        linePlot.fillGradientStartColor = UIColor.colorFromHex(hexString: "#555555")
-        linePlot.fillGradientEndColor = UIColor.colorFromHex(hexString: "#444444")
+        linePlot.fillGradientAngle = 270
+        linePlot.fillGradientColors = [0.0 : UIColor(red: 150.0/255.0, green: 90.0/255.0, blue: 240.0/255.0, alpha: 0.0),
+                                       0.3333 : UIColor(red: 55.0/255.0, green: 170.0/255.0, blue: 215.0/255.0, alpha: 1.0),
+                                       0.5 : UIColor(red: 0.0/255.0, green: 210.0/255.0, blue: 90.0/255.0, alpha: 1.0),
+                                       0.6666 : UIColor(red: 240.0/255.0, green: 210.0/255.0, blue: 0.0/255.0, alpha: 1.0),
+                                       0.8333 : UIColor(red: 240.0/255.0, green: 150.0/255.0, blue: 0.0/255.0, alpha: 1.0),
+                                       1.0 : UIColor(red: 255.0/255.0, green: 100.0/255.0, blue: 80.0/255.0, alpha: 1.0)]
         
         linePlot.adaptAnimationType = ScrollableGraphViewAnimationType.elastic
         
-        let dotPlot = DotPlot(identifier: "darkLineDot") // Add dots as well.
-        dotPlot.dataPointSize = 2
-        dotPlot.dataPointFillColor = UIColor.white
-        
-        dotPlot.adaptAnimationType = ScrollableGraphViewAnimationType.elastic
+//        let dotPlot = DotPlot(identifier: "darkLineDot") // Add dots as well.
+//        dotPlot.dataPointSize = 2
+//        dotPlot.dataPointFillColor = UIColor.white
+//        
+//        dotPlot.adaptAnimationType = ScrollableGraphViewAnimationType.elastic
 
         // Setup the reference lines.
         let referenceLines = ReferenceLines()
-        
-        referenceLines.referenceLineLabelFont = UIFont.boldSystemFont(ofSize: 8)
-        referenceLines.referenceLineColor = UIColor.white.withAlphaComponent(0.2)
-        referenceLines.referenceLineLabelColor = UIColor.white
-        
-        referenceLines.positionType = .absolute
-        // Reference lines will be shown at these values on the y-axis.
-        referenceLines.absolutePositions = [10, 20, 25, 30]
-        referenceLines.includeMinMax = false
-        
-        referenceLines.dataPointLabelColor = UIColor.white.withAlphaComponent(0.5)
+        referenceLines.shouldShowReferenceLines = false
+        referenceLines.dataPointLabelColor = UIColor.white
+        referenceLines.dataPointLabelAngle = 270
+        referenceLines.dataPointLabelBottomMargin = 20
+        referenceLines.dataPointLabelTopMargin = 64
         
         // Setup the graph
-        graphView.backgroundFillColor = UIColor.colorFromHex(hexString: "#333333")
+        graphView.backgroundFillColor = UIColor.black
         graphView.dataPointSpacing = 80
         
         graphView.shouldAnimateOnStartup = true
-        graphView.shouldAdaptRange = true
-        graphView.shouldRangeAlwaysStartAtZero = true
+        graphView.shouldAdaptRange = false
+        graphView.shouldRangeAlwaysStartAtZero = false
         
-        graphView.rangeMax = 50
+        graphView.rangeMin = 1
+        graphView.rangeMax = 200
         
         // Add everything to the graph.
         graphView.addReferenceLines(referenceLines: referenceLines)
         graphView.addPlot(plot: linePlot)
-        graphView.addPlot(plot: dotPlot)
+//        graphView.addPlot(plot: dotPlot)
         
         return graphView
     }
@@ -315,7 +328,16 @@ class ViewController: UIViewController, ScrollableGraphViewDataSource {
         barPlot.barWidth = 25
         barPlot.barLineWidth = 1
         barPlot.barLineColor = UIColor.colorFromHex(hexString: "#777777")
-        barPlot.barColor = UIColor.colorFromHex(hexString: "#555555")
+        barPlot.shouldFill = true
+        barPlot.fillType = ScrollableGraphViewFillType.solid
+        barPlot.fillGradientType = ScrollableGraphViewGradientType.linear
+        barPlot.fillGradientAngle = 270
+        barPlot.fillGradientColors =  [0.0 : UIColor(red: 150.0/255.0, green: 90.0/255.0, blue: 240.0/255.0, alpha: 0.0),
+                                       0.3333 : UIColor(red: 55.0/255.0, green: 170.0/255.0, blue: 215.0/255.0, alpha: 1.0),
+                                       0.5 : UIColor(red: 0.0/255.0, green: 210.0/255.0, blue: 90.0/255.0, alpha: 1.0),
+                                       0.6666 : UIColor(red: 240.0/255.0, green: 210.0/255.0, blue: 0.0/255.0, alpha: 1.0),
+                                       0.8333 : UIColor(red: 240.0/255.0, green: 150.0/255.0, blue: 0.0/255.0, alpha: 1.0),
+                                       1.0 : UIColor(red: 255.0/255.0, green: 100.0/255.0, blue: 80.0/255.0, alpha: 1.0)]
         
         barPlot.adaptAnimationType = ScrollableGraphViewAnimationType.elastic
         barPlot.animationDuration = 1.5

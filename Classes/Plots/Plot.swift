@@ -37,6 +37,10 @@ open class Plot {
     
     private var graphPoints = [GraphPoint]()
     
+    // Data Labels
+    private(set) var yLabelsView = UIView()
+    private(set) var yLabelPool = LabelPool()
+    
     deinit {
         displayLink?.invalidate()
     }
@@ -232,10 +236,12 @@ open class Plot {
     case custom
 }
 
+@objc public enum ScrollableGraphViewFillType : Int {
+    case solid
+    case gradient
+}
 
-
-
-
-
-
-
+@objc public enum ScrollableGraphViewGradientType : Int {
+    case linear
+    case radial
+}

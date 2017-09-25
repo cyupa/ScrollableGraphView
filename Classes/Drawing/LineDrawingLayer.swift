@@ -3,11 +3,10 @@ import UIKit
 
 internal class LineDrawingLayer : ScrollableGraphViewDrawingLayer {
     
-    private var currentLinePath = UIBezierPath()
-    
-    private var lineStyle: ScrollableGraphViewLineStyle
-    private var shouldFill: Bool
-    private var lineCurviness: CGFloat
+    private(set) var currentLinePath = UIBezierPath()
+    private(set) var lineStyle: ScrollableGraphViewLineStyle
+    private(set) var shouldFill: Bool
+    private(set) var lineCurviness: CGFloat
     
     init(frame: CGRect, lineWidth: CGFloat, lineColor: UIColor, lineStyle: ScrollableGraphViewLineStyle, lineJoin: String, lineCap: String, shouldFill: Bool, lineCurviness: CGFloat) {
         
@@ -122,7 +121,11 @@ internal class LineDrawingLayer : ScrollableGraphViewDrawingLayer {
         currentLinePath.addCurve(to: endPoint, controlPoint1: controlPointOne, controlPoint2: controlPointTwo)
     }
     
+    override func createBezierPath() -> UIBezierPath {
+        return createLinePath()
+    }
+    
     override func updatePath() {
-        self.path = createLinePath().cgPath
+        self.path = createBezierPath().cgPath
     }
 }

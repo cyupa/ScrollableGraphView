@@ -92,8 +92,8 @@ import UIKit
     private var referenceLineView: ReferenceLineDrawingView?
     
     // Labels
-    private var labelsView = UIView()
-    private var labelPool = LabelPool()
+    private var xLabelsView = UIView()
+    private var xLabelPool = LabelPool()
     
     // Data Source
     open var dataSource: ScrollableGraphViewDataSource? {
@@ -175,7 +175,7 @@ import UIKit
         self.addSubview(drawingView)
         
         // Add the x-axis labels view.
-        self.insertSubview(labelsView, aboveSubview: drawingView)
+        self.insertSubview(xLabelsView, aboveSubview: drawingView)
         
         // 2.
         // Calculate the total size of the graph, need to know this for the scrollview.
@@ -458,7 +458,6 @@ import UIKit
         rangeDidChange()
         updateUI()
         updatePaths()
-        updateLabelsForCurrentInterval()
     }
     
     // The functions for adding plots and reference lines need to be able to add plots
@@ -480,7 +479,7 @@ import UIKit
         self.referenceLines = referenceLines
         addReferenceViewDrawingView()
         
-        updateLabelsForCurrentInterval()
+        updateXLabelsForCurrentInterval()
     }
     
     private func initPlot(plot: Plot, activePointsInterval: CountableRange<Int>) {
@@ -498,6 +497,9 @@ import UIKit
         }
         
         addSubLayers(layers: plot.layers(forViewport: currentViewport()))
+        
+        // Add the y-axis labels view.
+        self.insertSubview(plot.yLabelsView, aboveSubview: drawingView)
     }
 
     private var queuedPlots: SGVQueue<Plot> = SGVQueue<Plot>()
@@ -697,13 +699,15 @@ import UIKit
         
         updatePaths()
         
+        let deactivatedLabelPoints = filterPointsForLabels(fromPoints: deactivatedPoints)
+        let activatedLabelPoints = filterPointsForLabels(fromPoints: activatedPoints)
+        
         if let ref = self.referenceLines {
             if(ref.shouldShowLabels) {
-                let deactivatedLabelPoints = filterPointsForLabels(fromPoints: deactivatedPoints)
-                let activatedLabelPoints = filterPointsForLabels(fromPoints: activatedPoints)
-                updateLabels(deactivatedPoints: deactivatedLabelPoints, activatedPoints: activatedLabelPoints)
+                updateXLabels(deactivatedPoints: deactivatedLabelPoints, activatedPoints: activatedLabelPoints)
             }
         }
+        updateYLabels(deactivatedPoints: deactivatedLabelPoints, activatedPoints: activatedLabelPoints)
     }
     
     private func rangeDidChange() {
@@ -793,7 +797,7 @@ import UIKit
     // TODO in 4.1: refactor all label adding & positioning code.
     
     // Update any labels for any new points that have been activated and deactivated.
-    private func updateLabels(deactivatedPoints: [Int], activatedPoints: [Int]) {
+    private func updateXLabels(deactivatedPoints: [Int], activatedPoints: [Int]) {
         
         guard let ref = self.referenceLines else {
             return
@@ -801,16 +805,16 @@ import UIKit
         
         // Disable any labels for the deactivated points.
         for point in deactivatedPoints {
-            labelPool.deactivateLabel(forPointIndex: point)
+            xLabelPool.deactivateLabel(forPointIndex: point)
         }
         
         // Grab an unused label and update it to the right position for the newly activated poitns
         for point in activatedPoints {
-            let label = labelPool.activateLabel(forPointIndex: point)
-            
-            label.text = (dataSource?.label(atIndex: point) ?? "")
+            let label = xLabelPool.activateLabel(forPointIndex: point)
+            label.text = dataSource?.xLabel(atIndex: point) ?? ""
             label.textColor = ref.dataPointLabelColor
             label.font = ref.dataPointLabelFont
+            label.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi * Double(ref.dataPointLabelAngle) / 180.0))
             
             label.sizeToFit()
             
@@ -819,43 +823,79 @@ import UIKit
             let rangeMin = (shouldAdaptRange) ? self.range.min : self.rangeMin
             let position = calculatePosition(atIndex: point, value: rangeMin)
             
-            label.frame = CGRect(origin: CGPoint(x: position.x - label.frame.width / 2, y: position.y + ref.dataPointLabelTopMargin), size: label.frame.size)
+            label.frame = CGRect(origin: CGPoint(x: position.x - label.frame.width / 2,
+                                                 y: position.y + ref.dataPointLabelTopMargin),
+                                 size: label.frame.size)
             
-            let _ = labelsView.subviews.filter { $0.frame == label.frame }.map { $0.removeFromSuperview() }
+            let _ = xLabelsView.subviews.filter { $0.frame == label.frame }.map { $0.removeFromSuperview() }
             
-            labelsView.addSubview(label)
+            xLabelsView.addSubview(label)
         }
     }
     
-    private func updateLabelsForCurrentInterval() {
-        // Have to ensure that the labels are added if we are supposed to be showing them.
-        if let ref = self.referenceLines {
-            if(ref.shouldShowLabels) {
+    private func updateYLabels(deactivatedPoints: [Int], activatedPoints: [Int]) {
+        // Disable any labels for the deactivated points.
+        for point in deactivatedPoints {
+            for plot in plots {
+                plot.yLabelPool.deactivateLabel(forPointIndex: point)
+            }
+        }
+        
+        // Grab an unused label and update it to the right position for the newly activated poitns
+        for point in activatedPoints {
+            for plot in plots {
+                let plotPoint = plot.graphPoint(forIndex: point)
+                let offset = dataSource?.yLabelOffset(forPlot: plot) ?? UIOffset(horizontal: 0,
+                                                                                 vertical: 0)
+                let label = plot.yLabelPool.activateLabel(forPointIndex: point)
+                label.attributedText = dataSource?.yLabel(forPlot: plot, atIndex: point)
+                label.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi * Double(dataSource?.yLabelTransformAngle(forPlot: plot) ?? 0) / 180.0))
+                label.sizeToFit()
                 
-                var activatedPoints: [Int] = []
-                for i in activePointsInterval {
-                    activatedPoints.append(i)
-                }
+                label.frame = CGRect(origin: CGPoint(x: plotPoint.x - label.frame.width / 2 + offset.horizontal,
+                                                     y: plotPoint.y - label.frame.height + offset.vertical),
+                                     size: label.frame.size)
                 
-                let filteredPoints = filterPointsForLabels(fromPoints: activatedPoints)
-                updateLabels(deactivatedPoints: filteredPoints, activatedPoints: filteredPoints)
+                let _ = plot.yLabelsView.subviews.filter { $0.frame == label.frame }.map { $0.removeFromSuperview() }
+                
+                plot.yLabelsView.addSubview(label)
             }
         }
     }
     
+    private func updateLabelsForCurrentInterval() {
+        updateXLabelsForCurrentInterval()
+        updateXLabelsForCurrentInterval()
+    }
+    
+    private func updateXLabelsForCurrentInterval() {
+        // Have to ensure that the labels are added if we are supposed to be showing them.
+        var activatedPoints: [Int] = []
+        for i in activePointsInterval {
+            activatedPoints.append(i)
+        }
+        let filteredPoints = filterPointsForLabels(fromPoints: activatedPoints)
+        
+        if let ref = self.referenceLines {
+            if(ref.shouldShowLabels) {
+                updateXLabels(deactivatedPoints: filteredPoints, activatedPoints: filteredPoints)
+            }
+        }
+    }
+    
+    private func updateYLabelsForCurrentInterval() {
+        // Have to ensure that the labels are added if we are supposed to be showing them.
+        var activatedPoints: [Int] = []
+        for i in activePointsInterval {
+            activatedPoints.append(i)
+        }
+        let filteredPoints = filterPointsForLabels(fromPoints: activatedPoints)
+        
+        updateYLabels(deactivatedPoints: filteredPoints, activatedPoints: filteredPoints)
+    }
+    
     private func repositionActiveLabels() {
-        
-        guard let ref = self.referenceLines else {
-            return
-        }
-        
-        for label in labelPool.activeLabels {
-            
-            let rangeMin = (shouldAdaptRange) ? self.range.min : self.rangeMin
-            let position = calculatePosition(atIndex: 0, value: rangeMin)
-            
-            label.frame.origin.y = position.y + ref.dataPointLabelTopMargin
-        }
+        updateLabelsForCurrentInterval()
     }
     
     private func filterPointsForLabels(fromPoints points:[Int]) -> [Int] {
@@ -932,11 +972,13 @@ import UIKit
                     // The bar layer needs the zero Y position to set the bottom of the bar
                     layer.zeroYPosition = zeroYPosition
                     // Need to make sure this is set in createLinePath
-                    assert (layer.zeroYPosition > 0);
+                    assert (layer.zeroYPosition > 0)
                     layer.updatePath()
                 }
             }
         }
+        
+        updateYLabelsForCurrentInterval()
     }
 }
 

@@ -3,31 +3,36 @@ import UIKit
 
 internal class GradientDrawingLayer : ScrollableGraphViewDrawingLayer {
     
-    private var startColor: UIColor
-    private var endColor: UIColor
-    private var gradientType: ScrollableGraphViewGradientType
-    
-    // Gradient fills are only used with lineplots and we need 
-    // to know what the line looks like.
-    private var lineDrawingLayer: LineDrawingLayer
+    private(set) var colors: [CGColor]
+    private(set) var locations: [CGFloat]
+    private(set) var gradientType: ScrollableGraphViewGradientType
+    private(set) var drawingLayer: ScrollableGraphViewDrawingLayer
+    private(set) var gradientAngle: Double {
+        didSet {
+            gradientAngle = max(min(gradientAngle, 360), 0)
+        }
+    }
     
     lazy private var gradientMask: CAShapeLayer = ({
         let mask = CAShapeLayer()
         
         mask.frame = CGRect(x: 0, y: 0, width: self.viewportWidth, height: self.viewportHeight)
         mask.fillRule = kCAFillRuleEvenOdd
-        mask.lineJoin = self.lineJoin
         
         return mask
     })()
     
-    init(frame: CGRect, startColor: UIColor, endColor: UIColor, gradientType: ScrollableGraphViewGradientType, lineJoin: String = kCALineJoinRound, lineDrawingLayer: LineDrawingLayer) {
-        self.startColor = startColor
-        self.endColor = endColor
+    init(frame: CGRect, colors: [UIColor], locations: [CGFloat], gradientType: ScrollableGraphViewGradientType, gradientAngle: Double, drawingLayer: ScrollableGraphViewDrawingLayer) {
+        var cgColors: [CGColor] = []
+        colors.forEach { (currentUIColor) in
+            cgColors.append(currentUIColor.cgColor)
+        }
+        self.gradientAngle = gradientAngle
+        self.colors = cgColors
+        self.locations = locations
         self.gradientType = gradientType
-        //self.lineJoin = lineJoin
         
-        self.lineDrawingLayer = lineDrawingLayer
+        self.drawingLayer = drawingLayer
         
         super.init(viewportWidth: frame.size.width, viewportHeight: frame.size.height)
         
@@ -43,28 +48,32 @@ internal class GradientDrawingLayer : ScrollableGraphViewDrawingLayer {
         self.mask = gradientMask
     }
     
+    override func createBezierPath() -> UIBezierPath {
+        return drawingLayer.createBezierPath()
+    }
+    
     override func updatePath() {
-        gradientMask.path = lineDrawingLayer.createLinePath().cgPath
+        gradientMask.path = createBezierPath().cgPath
     }
     
     override func draw(in ctx: CGContext) {
-        
-        let colors = [startColor.cgColor, endColor.cgColor]
         let colorSpace = CGColorSpaceCreateDeviceRGB()
-        let locations: [CGFloat] = [0.0, 1.0]
         let gradient = CGGradient(colorsSpace: colorSpace, colors: colors as CFArray, locations: locations)
         
-        let displacement = ((viewportWidth / viewportHeight) / 2.5) * self.bounds.height
-        let topCentre = CGPoint(x: offset + self.bounds.width / 2, y: -displacement)
-        let bottomCentre = CGPoint(x: offset + self.bounds.width / 2, y: self.bounds.height)
+        let degree = CGFloat(gradientAngle * Double.pi / 180)
+        let center = CGPoint(x: frame.width / 2, y: frame.height / 2)
+        let startPoint = CGPoint(x: center.x - cos(degree) * frame.width / 2,
+                                 y: center.y - sin(degree) * frame.height / 2)
+        let endPoint = CGPoint(x: center.x + cos(degree) * frame.width / 2,
+                               y: center.y + sin(degree) * frame.height / 2)
         let startRadius: CGFloat = 0
         let endRadius: CGFloat = self.bounds.width
         
         switch(gradientType) {
         case .linear:
-            ctx.drawLinearGradient(gradient!, start: topCentre, end: bottomCentre, options: .drawsAfterEndLocation)
+            ctx.drawLinearGradient(gradient!, start: startPoint, end: endPoint, options: .drawsAfterEndLocation)
         case .radial:
-            ctx.drawRadialGradient(gradient!, startCenter: topCentre, startRadius: startRadius, endCenter: topCentre, endRadius: endRadius, options: .drawsAfterEndLocation)
+            ctx.drawRadialGradient(gradient!, startCenter: startPoint, startRadius: startRadius, endCenter: endPoint, endRadius: endRadius, options: .drawsAfterEndLocation)
         }
     }
 }
