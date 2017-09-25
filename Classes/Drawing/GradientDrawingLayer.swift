@@ -3,40 +3,36 @@ import UIKit
 
 internal class GradientDrawingLayer : ScrollableGraphViewDrawingLayer {
     
-    private var colors: [CGColor]
-    private var locations: [CGFloat]
-    private var gradientType: ScrollableGraphViewGradientType
-    var gradientAngle = 0.0 {
+    private(set) var colors: [CGColor]
+    private(set) var locations: [CGFloat]
+    private(set) var gradientType: ScrollableGraphViewGradientType
+    private(set) var drawingLayer: ScrollableGraphViewDrawingLayer
+    private(set) var gradientAngle: Double {
         didSet {
             gradientAngle = max(min(gradientAngle, 360), 0)
         }
     }
-    
-    // Gradient fills are only used with lineplots and we need 
-    // to know what the line looks like.
-    private var lineDrawingLayer: LineDrawingLayer
     
     lazy private var gradientMask: CAShapeLayer = ({
         let mask = CAShapeLayer()
         
         mask.frame = CGRect(x: 0, y: 0, width: self.viewportWidth, height: self.viewportHeight)
         mask.fillRule = kCAFillRuleEvenOdd
-//        mask.lineJoin = self.lineJoin
         
         return mask
     })()
     
-    init(frame: CGRect, colors: [UIColor], locations: [CGFloat], gradientType: ScrollableGraphViewGradientType, /*lineJoin: String = kCALineJoinRound,*/ lineDrawingLayer: LineDrawingLayer) {
+    init(frame: CGRect, colors: [UIColor], locations: [CGFloat], gradientType: ScrollableGraphViewGradientType, gradientAngle: Double, drawingLayer: ScrollableGraphViewDrawingLayer) {
         var cgColors: [CGColor] = []
         colors.forEach { (currentUIColor) in
             cgColors.append(currentUIColor.cgColor)
         }
+        self.gradientAngle = gradientAngle
         self.colors = cgColors
         self.locations = locations
         self.gradientType = gradientType
-//        self.lineJoin = lineJoin
         
-        self.lineDrawingLayer = lineDrawingLayer
+        self.drawingLayer = drawingLayer
         
         super.init(viewportWidth: frame.size.width, viewportHeight: frame.size.height)
         
@@ -52,12 +48,15 @@ internal class GradientDrawingLayer : ScrollableGraphViewDrawingLayer {
         self.mask = gradientMask
     }
     
+    override func createBezierPath() -> UIBezierPath {
+        return drawingLayer.createBezierPath()
+    }
+    
     override func updatePath() {
-        gradientMask.path = lineDrawingLayer.createLinePath().cgPath
+        gradientMask.path = createBezierPath().cgPath
     }
     
     override func draw(in ctx: CGContext) {
-        
         let colorSpace = CGColorSpaceCreateDeviceRGB()
         let gradient = CGGradient(colorsSpace: colorSpace, colors: colors as CFArray, locations: locations)
         

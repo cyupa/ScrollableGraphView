@@ -102,7 +102,7 @@ open class LinePlot : Plot {
         case .solid:
             if(shouldFill) {
                 // Setup fill
-                fillLayer = FillDrawingLayer(frame: viewport, fillColor: fillColor, lineDrawingLayer: lineLayer!)
+                fillLayer = FillDrawingLayer(frame: viewport, fillColor: fillColor, drawingLayer: lineLayer!)
             }
             
         case .gradient:
@@ -112,8 +112,7 @@ open class LinePlot : Plot {
                 locations.forEach({ (location) in
                     colors.append(fillGradientColors[location]!)
                 })
-                gradientLayer = GradientDrawingLayer(frame: viewport, colors: colors, locations: locations, gradientType: fillGradientType, lineDrawingLayer: lineLayer!)
-                gradientLayer?.gradientAngle = fillGradientAngle
+                gradientLayer = GradientDrawingLayer(frame: viewport, colors: colors, locations: locations, gradientType: fillGradientType, gradientAngle: fillGradientAngle, drawingLayer: lineLayer!)
             }
         }
         
@@ -126,14 +125,4 @@ open class LinePlot : Plot {
 @objc public enum ScrollableGraphViewLineStyle : Int {
     case straight
     case smooth
-}
-
-@objc public enum ScrollableGraphViewFillType : Int {
-    case solid
-    case gradient
-}
-
-@objc public enum ScrollableGraphViewGradientType : Int {
-    case linear
-    case radial
 }

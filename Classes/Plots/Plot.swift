@@ -236,10 +236,12 @@ open class Plot {
     case custom
 }
 
+@objc public enum ScrollableGraphViewFillType : Int {
+    case solid
+    case gradient
+}
 
-
-
-
-
-
-
+@objc public enum ScrollableGraphViewGradientType : Int {
+    case linear
+    case radial
+}

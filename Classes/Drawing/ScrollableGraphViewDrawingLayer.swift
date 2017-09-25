@@ -42,6 +42,10 @@ internal class ScrollableGraphViewDrawingLayer : CAShapeLayer {
         self.bounds.origin.x = offset
     }
     
+    func createBezierPath() -> UIBezierPath {
+        fatalError("createBezierPath needs to be implemented by the subclass")
+    }
+    
     func updatePath() {
         fatalError("updatePath needs to be implemented by the subclass")
     }
