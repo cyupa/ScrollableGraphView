@@ -3,8 +3,8 @@ import UIKit
 
 internal class GradientDrawingLayer : ScrollableGraphViewDrawingLayer {
     
-    private var startColor: UIColor
-    private var endColor: UIColor
+    private var colors: [CGColor]
+    private var locations: [CGFloat]
     private var gradientType: ScrollableGraphViewGradientType
     
     // Gradient fills are only used with lineplots and we need 
@@ -16,16 +16,20 @@ internal class GradientDrawingLayer : ScrollableGraphViewDrawingLayer {
         
         mask.frame = CGRect(x: 0, y: 0, width: self.viewportWidth, height: self.viewportHeight)
         mask.fillRule = kCAFillRuleEvenOdd
-        mask.lineJoin = self.lineJoin
+//        mask.lineJoin = self.lineJoin
         
         return mask
     })()
     
-    init(frame: CGRect, startColor: UIColor, endColor: UIColor, gradientType: ScrollableGraphViewGradientType, lineJoin: String = kCALineJoinRound, lineDrawingLayer: LineDrawingLayer) {
-        self.startColor = startColor
-        self.endColor = endColor
+    init(frame: CGRect, colors: [UIColor], locations: [CGFloat], gradientType: ScrollableGraphViewGradientType, /*lineJoin: String = kCALineJoinRound,*/ lineDrawingLayer: LineDrawingLayer) {
+        var cgColors: [CGColor] = []
+        colors.forEach { (currentUIColor) in
+            cgColors.append(currentUIColor.cgColor)
+        }
+        self.colors = cgColors
+        self.locations = locations
         self.gradientType = gradientType
-        //self.lineJoin = lineJoin
+//        self.lineJoin = lineJoin
         
         self.lineDrawingLayer = lineDrawingLayer
         
@@ -49,9 +53,7 @@ internal class GradientDrawingLayer : ScrollableGraphViewDrawingLayer {
     
     override func draw(in ctx: CGContext) {
         
-        let colors = [startColor.cgColor, endColor.cgColor]
         let colorSpace = CGColorSpaceCreateDeviceRGB()
-        let locations: [CGFloat] = [0.0, 1.0]
         let gradient = CGGradient(colorsSpace: colorSpace, colors: colors as CFArray, locations: locations)
         
         let displacement = ((viewportWidth / viewportHeight) / 2.5) * self.bounds.height
