@@ -67,6 +67,13 @@ open class ReferenceLines {
     open var dataPointLabelFont: UIFont? = UIFont.systemFont(ofSize: 10)
     /// Used to force the graph to show every n-th dataPoint label
     @IBInspectable open var dataPointLabelsSparsity: Int = 1
+    /// An affine transformation matrix for use in drawing 2D graphics. Can be from 0 to 360. By default 0.
+    @IBInspectable open var dataPointLabelAngle: CGFloat = 0
+        {
+        didSet {
+            dataPointLabelAngle = max(min(dataPointLabelAngle, 360), 0)
+        }
+    }
     
     public init() {
         // Need this for external frameworks.
