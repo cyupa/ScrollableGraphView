@@ -329,7 +329,7 @@ import UIKit
             setup()
             
             if(shouldAnimateOnStartup) {
-                startAnimations(withStaggerValue: 0.15)
+                startAnimations(withStaggerValue: 0.15, direction: direction)
             }
             
             // We're done setting up.
@@ -493,7 +493,7 @@ import UIKit
         plot.graphViewDrawingDelegate = self
         self.plots.append(plot)
         initPlot(plot: plot, activePointsInterval: activePointsInterval)
-        startAnimations(withStaggerValue: 0.15)
+        startAnimations(withStaggerValue: 0.15, direction: direction)
     }
     
     private func addReferenceLinesToGraph(referenceLines: ReferenceLines) {
@@ -735,7 +735,8 @@ import UIKit
         
         // If shouldAnimateOnAdapt is enabled it will kickoff any animations that need to occur.
         if(shouldAnimateOnAdapt) {
-            startAnimations()
+            let direction: ScrollableGraphViewDirection = previousActivePointsInterval.startIndex < activePointsInterval.startIndex ? ScrollableGraphViewDirection.leftToRight : ScrollableGraphViewDirection.rightToLeft
+            startAnimations(direction: direction)
         }
         else {
             // Otherwise we should simple just move the data to their positions.
@@ -764,7 +765,7 @@ import UIKit
             #if !TARGET_INTERFACE_BUILDER
                 stopAnimations()
             #endif
-            startAnimations()
+            startAnimations(direction: direction)
             
             // The labels will also need to be repositioned if the viewport has changed.
             repositionActiveLabels()
@@ -793,7 +794,7 @@ import UIKit
     
     // Animations
     
-    private func startAnimations(withStaggerValue stagger: Double = 0) {
+    private func startAnimations(withStaggerValue stagger: Double = 0, direction: ScrollableGraphViewDirection) {
         var pointsToAnimate = 0 ..< 0
         
         #if !TARGET_INTERFACE_BUILDER
@@ -804,7 +805,7 @@ import UIKit
         
         for plot in plots {
             let dataForPointsToAnimate = getData(forPlot: plot, andActiveInterval: pointsToAnimate)
-            plot.startAnimations(forPoints: pointsToAnimate, withData: dataForPointsToAnimate, withStaggerValue: stagger)
+            plot.startAnimations(forPoints: pointsToAnimate, withData: dataForPointsToAnimate, withStaggerValue: stagger, direction: direction)
         }
     }
     
