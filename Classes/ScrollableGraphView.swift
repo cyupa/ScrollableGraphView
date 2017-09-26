@@ -1017,31 +1017,44 @@ fileprivate class SGVQueue<T> {
 
 // We have to be our own data source for interface builder.
 #if TARGET_INTERFACE_BUILDER
-public extension ScrollableGraphView : ScrollableGraphViewDataSource {
+extension ScrollableGraphView : ScrollableGraphViewDataSource {
     
-    var numberOfDisplayItems: Int {
+    private var numberOfDisplayItems: Int {
         get {
             return 30
         }
     }
     
-    var linePlotData: [Double] {
+    private var linePlotData: [Double] {
         get {
             return self.generateRandomData(numberOfDisplayItems, max: 100, shouldIncludeOutliers: false)
         }
+    }
+    
+    public func numberOfPoints() -> Int {
+        return numberOfDisplayItems
     }
     
     public func value(forPlot plot: Plot, atIndex pointIndex: Int) -> Double {
         return linePlotData[pointIndex]
     }
     
-    public func label(atIndex pointIndex: Int) -> String {
+    public func xLabel(atIndex pointIndex: Int) -> String {
         return "\(pointIndex)"
     }
     
-    public func numberOfPoints() -> Int {
-        return numberOfDisplayItems
+    public func yLabel(forPlot plot: Plot, atIndex pointIndex: Int) -> NSAttributedString? {
+        return NSAttributedString(string: String(self.value(forPlot: plot, atIndex: pointIndex)))
     }
+    
+    public func yLabelOffset(forPlot plot: Plot) -> UIOffset? {
+        return nil
+    }
+    
+    public func yLabelTransformAngle(forPlot plot: Plot) -> CGFloat? {
+        return nil
+    }
+    
     
     private func generateRandomData(_ numberOfItems: Int, max: Double, shouldIncludeOutliers: Bool = true) -> [Double] {
         var data = [Double]()
