@@ -18,8 +18,6 @@ extension UIColor {
                 cleanedHexString = hexString.substring(from: hexString.characters.index(hexString.startIndex, offsetBy: 1))
             }
             
-            // TODO: Other cleanup. Allow for a "short" hex string, i.e., "#fff"
-            
             return cleanedHexString
         }
         

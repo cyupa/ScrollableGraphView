@@ -52,7 +52,7 @@ open class ReferenceLines {
     /// The NSNumberFormatterStyle that reference lines should use to display
     @IBInspectable open var referenceLineNumberStyle: NumberFormatter.Style = .none
     
-    // Data Point Labels // TODO: Refactor these into their own settings and allow for more label options (positioning)
+    // Data Point Labels
     // ################################################################################################################
     
     /// Whether or not to show the labels on the x-axis for each point.

@@ -261,6 +261,7 @@ class ViewController: UIViewController, ScrollableGraphViewDataSource {
     fileprivate func createDarkGraph(_ frame: CGRect) -> ScrollableGraphView {
         let graphView = ScrollableGraphView(frame: frame, dataSource: self)
         graphView.direction = .rightToLeft
+        graphView.shouldDrawFullScreenLayers = false
         
         // Setup the line plot.
         let linePlot = LinePlot(identifier: "darkLine")
@@ -307,7 +308,7 @@ class ViewController: UIViewController, ScrollableGraphViewDataSource {
         graphView.shouldRangeAlwaysStartAtZero = false
         
         graphView.rangeMin = 1
-        graphView.rangeMax = 200
+        graphView.rangeMax = 70
         
         // Add everything to the graph.
         graphView.addReferenceLines(referenceLines: referenceLines)
@@ -579,7 +580,6 @@ class ViewController: UIViewController, ScrollableGraphViewDataSource {
     
     func reloadDidTap(_ gesture: UITapGestureRecognizer) {
         
-        // TODO: Currently changing the number of data items is not supported.
         // It is only possible to change the the actual values of the data before reloading.
         // numberOfDataItems = 30
         

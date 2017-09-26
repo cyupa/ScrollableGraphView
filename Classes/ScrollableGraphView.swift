@@ -60,6 +60,9 @@ import UIKit
     /// Whether or not the graph should animate to their positions when the graph is first displayed.
     @IBInspectable open var shouldAnimateOnStartup: Bool = true
     
+    /// If true then the layers will not be truncated by minimum and maximum ranges.
+    @IBInspectable open var shouldDrawFullScreenLayers : Bool = true
+    
     // Reference Line Settings
     // #######################
     
@@ -355,7 +358,6 @@ import UIKit
             
             // If adaption is enabled we want to
             if(shouldAdaptRange) {
-                // TODO: This is currently called every single frame...
                 // We need to only calculate the range if the active points interval has changed!
                 #if !TARGET_INTERFACE_BUILDER
                     let newRange = calculateRange(forActivePointsInterval: newActivePointsInterval)
@@ -509,7 +511,7 @@ import UIKit
             plot.setup() // Only init the animations for plots if we are not in IB
         #endif
         
-        plot.createPlotPoints(numberOfPoints: dataSource!.numberOfPoints(), range: range) // TODO: removed forced unwrap
+        plot.createPlotPoints(numberOfPoints: dataSource!.numberOfPoints(), range: range)
         
         // If we are not animating on startup then just set all the plot positions to their respective values
         if(!shouldAnimateOnStartup) {
@@ -816,7 +818,6 @@ import UIKit
     }
     
     // Labels
-    // TODO in 4.1: refactor all label adding & positioning code.
     
     // Update any labels for any new points that have been activated and deactivated.
     private func updateXLabels(deactivatedPoints: [Int], activatedPoints: [Int]) {
@@ -979,7 +980,26 @@ import UIKit
     }
     
     internal func currentViewport() -> CGRect {
-        return CGRect(x: 0, y: 0, width: viewportWidth, height: viewportHeight)
+        if shouldDrawFullScreenLayers {
+            return CGRect(x: 0,
+                          y: 0,
+                          width: viewportWidth,
+                          height: viewportHeight)
+        } else {
+            // self.range.min is the current ranges minimum that has been detected
+            // self.rangeMin is the minimum that should be used as specified by the user
+            let rangeMin = (shouldAdaptRange) ? self.range.min : self.rangeMin
+            let rangeMinPosition = calculatePosition(atIndex: 0, value: rangeMin)
+            
+            // self.range.max is the current ranges maximum that has been detected
+            // self.rangeMax is the maximum that should be used as specified by the user
+            let rangeMax = (shouldAdaptRange) ? self.range.max : self.rangeMax
+            let rangeMaxPosition = calculatePosition(atIndex: 0, value: rangeMax)
+            return CGRect(x: 0,
+                          y: rangeMaxPosition.y,
+                          width: viewportWidth,
+                          height: viewportHeight - (frame.height - rangeMinPosition.y))
+        }
     }
     
     // Update any paths with the new path based on visible data points.
