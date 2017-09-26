@@ -67,11 +67,14 @@ open class BarPlot : Plot {
     }
 
     override func layers(forViewport viewport: CGRect) -> [ScrollableGraphViewDrawingLayer?] {
-        createLayers(viewport: viewport)
+        createLayersIfNeed(viewport: viewport)
         return [barLayer, fillLayer, gradientLayer]
     }
     
-    private func createLayers(viewport: CGRect) {
+    private func createLayersIfNeed(viewport: CGRect) {
+        guard barLayer == nil else {
+            return
+        }
 
         // Create the bar drawing layer.
         barLayer = BarDrawingLayer(
