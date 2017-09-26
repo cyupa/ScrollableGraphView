@@ -260,6 +260,7 @@ class ViewController: UIViewController, ScrollableGraphViewDataSource {
     // Reference lines are positioned absolutely. will appear at specified values on y axis
     fileprivate func createDarkGraph(_ frame: CGRect) -> ScrollableGraphView {
         let graphView = ScrollableGraphView(frame: frame, dataSource: self)
+        graphView.direction = .rightToLeft
         
         // Setup the line plot.
         let linePlot = LinePlot(identifier: "darkLine")

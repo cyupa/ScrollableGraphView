@@ -145,9 +145,9 @@ open class Plot {
         return dt
     }
     
-    internal func startAnimations(forPoints pointsToAnimate: CountableRange<Int>, withData data: [Double], withStaggerValue stagger: Double) {
+    internal func startAnimations(forPoints pointsToAnimate: CountableRange<Int>, withData data: [Double], withStaggerValue stagger: Double, direction: ScrollableGraphViewDirection) {
         
-        animatePlotPointPositions(forPoints: pointsToAnimate, withData: data, withDelay: stagger)
+        animatePlotPointPositions(forPoints: pointsToAnimate, withData: data, withDelay: stagger, direction: direction)
     }
     
     internal func createPlotPoints(numberOfPoints: Int, range: (min: Double, max: Double)) {
@@ -200,13 +200,20 @@ open class Plot {
     // When the range changes, we need to set the position for any VISIBLE points, either animating or setting directly
     // depending on the settings.
     // Needs to be called when the range has changed.
-    internal func animatePlotPointPositions(forPoints pointsToAnimate: CountableRange<Int>, withData data: [Double], withDelay delay: Double) {
+    internal func animatePlotPointPositions(forPoints pointsToAnimate: CountableRange<Int>, withData data: [Double], withDelay delay: Double, direction: ScrollableGraphViewDirection) {
         // For any visible points, kickoff the animation to their new position after the axis' min/max has changed.
-        var dataIndex = 0
+        var dataIndex: Int = 0
         for pointIndex in pointsToAnimate {
             let newPosition = graphViewDrawingDelegate.calculatePosition(atIndex: pointIndex, value: data[dataIndex])
             let point = graphPoints[pointIndex]
-            animate(point: point, to: newPosition, withDelay: Double(dataIndex) * delay)
+            let pointDelay: Double
+            switch direction {
+            case .leftToRight:
+                pointDelay = Double(dataIndex) * delay
+            case .rightToLeft:
+                pointDelay = Double(pointsToAnimate.count - dataIndex) * delay
+            }
+            animate(point: point, to: newPosition, withDelay: pointDelay)
             dataIndex += 1
         }
     }
