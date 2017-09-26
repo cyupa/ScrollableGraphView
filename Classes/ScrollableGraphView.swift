@@ -451,7 +451,7 @@ import UIKit
         }
     }
     
-    public func removeAllPlot(plot: Plot) {
+    public func removeAllPlot() {
         for plot in plots {
             removePlot(plot: plot)
         }
