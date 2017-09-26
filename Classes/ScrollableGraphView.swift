@@ -86,7 +86,7 @@ import UIKit
     
     // Graph Drawing
     private var drawingView = UIView()
-    private(set) var plots: [Plot] = [Plot]()
+    private var plots: [Plot] = [Plot]()
     
     // Reference Lines
     private var referenceLineView: ReferenceLineDrawingView?
@@ -420,6 +420,10 @@ import UIKit
     
     // MARK: - Public Methods
     // ######################
+    
+    public func listOfPlots() -> [Plot] {
+        return plots
+    }
     
     public func addPlot(plot: Plot) {
         if self.plots.index(where: { (currentPlot) -> Bool in
