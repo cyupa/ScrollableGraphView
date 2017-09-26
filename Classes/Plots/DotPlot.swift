@@ -26,11 +26,15 @@ open class DotPlot : Plot {
     }
     
     override func layers(forViewport viewport: CGRect) -> [ScrollableGraphViewDrawingLayer?] {
-        createLayers(viewport: viewport)
+        createLayersIfNeed(viewport: viewport)
         return [dataPointLayer]
     }
     
-    private func createLayers(viewport: CGRect) {
+    private func createLayersIfNeed(viewport: CGRect) {
+        guard dataPointLayer == nil else {
+            return
+        }
+        
         dataPointLayer = DotDrawingLayer(
             frame: viewport,
             fillColor: dataPointFillColor,

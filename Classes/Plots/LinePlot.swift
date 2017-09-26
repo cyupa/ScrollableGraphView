@@ -85,11 +85,15 @@ open class LinePlot : Plot {
     }
     
     override func layers(forViewport viewport: CGRect) -> [ScrollableGraphViewDrawingLayer?] {
-        createLayers(viewport: viewport)
+        createLayersIfNeed(viewport: viewport)
         return [lineLayer, fillLayer, gradientLayer]
     }
     
-    private func createLayers(viewport: CGRect) {
+    private func createLayersIfNeed(viewport: CGRect) {
+        
+        guard lineLayer == nil else {
+            return
+        }
         
         // Create the line drawing layer.
         lineLayer = LineDrawingLayer(frame: viewport, lineWidth: lineWidth, lineColor: lineColor, lineStyle: lineStyle, lineJoin: lineJoin, lineCap: lineCap, shouldFill: shouldFill, lineCurviness: lineCurviness)

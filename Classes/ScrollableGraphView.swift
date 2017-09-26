@@ -86,7 +86,7 @@ import UIKit
     
     // Graph Drawing
     private var drawingView = UIView()
-    private var plots: [Plot] = [Plot]()
+    private(set) var plots: [Plot] = [Plot]()
     
     // Reference Lines
     private var referenceLineView: ReferenceLineDrawingView?
@@ -252,14 +252,6 @@ import UIKit
         
         // Set the first active points interval. These are the points that are visible when the view loads.
         self.activePointsInterval = initialActivePointsInterval
-    }
-    
-    // TODO in 4.1: Plot layer ordering.
-    // TODO in 4.1: Plot removal.
-    private func addDrawingLayersForPlots(inViewport viewport: CGRect) {
-        for plot in plots {
-            addSubLayers(layers: plot.layers(forViewport: viewport))
-        }
     }
     
     private func addSubLayers(layers: [ScrollableGraphViewDrawingLayer?]) {
@@ -430,6 +422,11 @@ import UIKit
     // ######################
     
     public func addPlot(plot: Plot) {
+        if self.plots.index(where: { (currentPlot) -> Bool in
+            return currentPlot.identifier == plot.identifier
+        }) != nil {
+            fatalError("Plot already created with identifier \(plot.identifier)")
+        }
         // If we aren't setup yet, save the plot to be added during setup.
         if(isInitialSetup) {
             enqueuePlot(plot)
@@ -437,6 +434,26 @@ import UIKit
         // Otherwise, just add the plot directly.
         else {
             addPlotToGraph(plot: plot, activePointsInterval: self.activePointsInterval)
+        }
+    }
+    
+    public func removePlot(plot: Plot) {
+        if let index = self.plots.index(where: { (currentPlot) -> Bool in
+            return currentPlot.identifier == plot.identifier
+        }) {
+            let plot = plots[index]
+            plot.dequeueAllAnimations()
+            plot.layers(forViewport: currentViewport()).forEach { (layer) in
+                layer?.removeAllAnimations()
+                layer?.removeFromSuperlayer()
+            }
+            plots.remove(at: index)
+        }
+    }
+    
+    public func removeAllPlot(plot: Plot) {
+        for plot in plots {
+            removePlot(plot: plot)
         }
     }
     
