@@ -292,13 +292,14 @@ class ViewController: UIViewController, ScrollableGraphViewDataSource {
         // Setup the reference lines.
         let referenceLines = ReferenceLines()
         referenceLines.shouldShowReferenceLines = false
+        referenceLines.shouldShowLabels = true
         referenceLines.dataPointLabelColor = UIColor.white
         referenceLines.dataPointLabelAngle = 270
-        referenceLines.dataPointLabelBottomMargin = 20
-        referenceLines.dataPointLabelTopMargin = 64
+        referenceLines.dataPointLabelBottomMargin = 0
+        referenceLines.dataPointLabelTopMargin = 20
         
         // Setup the graph
-        graphView.backgroundFillColor = UIColor.black
+        graphView.backgroundFillColor = UIColor.colorFromHex(hexString: "#333333")
         graphView.dataPointSpacing = 80
         
         graphView.shouldAnimateOnStartup = true

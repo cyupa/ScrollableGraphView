@@ -846,7 +846,7 @@ import UIKit
             let position = calculatePosition(atIndex: point, value: rangeMin)
             
             label.frame = CGRect(origin: CGPoint(x: position.x - label.frame.width / 2,
-                                                 y: position.y + ref.dataPointLabelTopMargin),
+                                                 y: frame.height - label.frame.height - ref.dataPointLabelBottomMargin),
                                  size: label.frame.size)
             
             let _ = xLabelsView.subviews.filter { $0.frame == label.frame }.map { $0.removeFromSuperview() }
@@ -868,7 +868,7 @@ import UIKit
             for plot in plots {
                 let plotPoint = plot.graphPoint(forIndex: point)
                 let offset = dataSource?.yLabelOffset(forPlot: plot) ?? UIOffset(horizontal: 0,
-                                                                                 vertical: 0)
+                                                                                 vertical: -4)
                 let label = plot.yLabelPool.activateLabel(forPointIndex: point)
                 label.attributedText = dataSource?.yLabel(forPlot: plot, atIndex: point)
                 label.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi * Double(dataSource?.yLabelTransformAngle(forPlot: plot) ?? 0) / 180.0))
@@ -877,7 +877,6 @@ import UIKit
                 label.frame = CGRect(origin: CGPoint(x: plotPoint.x - label.frame.width / 2 + offset.horizontal,
                                                      y: plotPoint.y - label.frame.height + offset.vertical),
                                      size: label.frame.size)
-                
                 let _ = plot.yLabelsView.subviews.filter { $0.frame == label.frame }.map { $0.removeFromSuperview() }
                 
                 plot.yLabelsView.addSubview(label)

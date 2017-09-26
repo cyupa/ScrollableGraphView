@@ -60,7 +60,7 @@ open class ReferenceLines {
     /// How far from the "minimum" reference line the data point labels should be rendered.
     @IBInspectable open var dataPointLabelTopMargin: CGFloat = 10
     /// How far from the bottom of the view the data point labels should be rendered.
-    @IBInspectable open var dataPointLabelBottomMargin: CGFloat = 0
+    @IBInspectable open var dataPointLabelBottomMargin: CGFloat = 10
     /// The font for the data point labels.
     @IBInspectable open var dataPointLabelColor: UIColor = UIColor.black
     /// The colour for the data point labels.
