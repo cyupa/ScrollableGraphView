@@ -332,15 +332,8 @@ class ViewController: UIViewController, ScrollableGraphViewDataSource {
         barPlot.barLineWidth = 1
         barPlot.barLineColor = UIColor.colorFromHex(hexString: "#777777")
         barPlot.shouldFill = true
-        barPlot.fillType = ScrollableGraphViewFillType.gradient
-        barPlot.fillGradientType = ScrollableGraphViewGradientType.linear
-        barPlot.fillGradientAngle = 270
-        barPlot.fillGradientColors =  [0.0 : UIColor(red: 150.0/255.0, green: 90.0/255.0, blue: 240.0/255.0, alpha: 0.0),
-                                       0.3333 : UIColor(red: 55.0/255.0, green: 170.0/255.0, blue: 215.0/255.0, alpha: 1.0),
-                                       0.5 : UIColor(red: 0.0/255.0, green: 210.0/255.0, blue: 90.0/255.0, alpha: 1.0),
-                                       0.6666 : UIColor(red: 240.0/255.0, green: 210.0/255.0, blue: 0.0/255.0, alpha: 1.0),
-                                       0.8333 : UIColor(red: 240.0/255.0, green: 150.0/255.0, blue: 0.0/255.0, alpha: 1.0),
-                                       1.0 : UIColor(red: 255.0/255.0, green: 100.0/255.0, blue: 80.0/255.0, alpha: 1.0)]
+        barPlot.fillType = ScrollableGraphViewFillType.solid
+        barPlot.fillColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.1)
         
         barPlot.adaptAnimationType = ScrollableGraphViewAnimationType.elastic
         barPlot.animationDuration = 1.5

@@ -58,7 +58,6 @@ open class BarPlot : Plot {
     // #############
     
     private var barLayer: BarDrawingLayer?
-    private var fillLayer: FillDrawingLayer?
     private var gradientLayer: GradientDrawingLayer?
     
     public init(identifier: String) {
@@ -68,7 +67,7 @@ open class BarPlot : Plot {
 
     override func layers(forViewport viewport: CGRect) -> [ScrollableGraphViewDrawingLayer?] {
         createLayersIfNeed(viewport: viewport)
-        return [barLayer, fillLayer, gradientLayer]
+        return [barLayer, gradientLayer]
     }
     
     private func createLayersIfNeed(viewport: CGRect) {
@@ -92,7 +91,7 @@ open class BarPlot : Plot {
         case .solid:
             if(shouldFill) {
                 // Setup fill
-                fillLayer = FillDrawingLayer(frame: viewport, fillColor: fillColor, drawingLayer: barLayer!)
+                barLayer?.fillColor = fillColor.cgColor
             }
             
         case .gradient:
@@ -107,7 +106,6 @@ open class BarPlot : Plot {
         }
         
         barLayer?.owner = self
-        fillLayer?.owner = self
         gradientLayer?.owner = self
     }
 }
