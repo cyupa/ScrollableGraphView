@@ -110,7 +110,7 @@ class ViewController: UIViewController, ScrollableGraphViewDataSource {
     }
     
     func yLabelTransformAngle(forPlot plot: Plot) -> CGFloat? {
-        return 270
+        return 0
     }
     
     func numberOfPoints() -> Int {
@@ -535,7 +535,7 @@ class ViewController: UIViewController, ScrollableGraphViewDataSource {
     
     // Button tap events
     
-    func didTap(_ gesture: UITapGestureRecognizer) {
+    @objc func didTap(_ gesture: UITapGestureRecognizer) {
         
         currentGraphType.next()
         
@@ -579,7 +579,7 @@ class ViewController: UIViewController, ScrollableGraphViewDataSource {
         setupConstraints()
     }
     
-    func reloadDidTap(_ gesture: UITapGestureRecognizer) {
+    @objc func reloadDidTap(_ gesture: UITapGestureRecognizer) {
         
         // It is only possible to change the the actual values of the data before reloading.
         // numberOfDataItems = 30

@@ -845,7 +845,7 @@ import UIKit
             label.textColor = ref.dataPointLabelColor
             label.font = ref.dataPointLabelFont
             label.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi * Double(ref.dataPointLabelAngle) / 180.0))
-            
+
             label.sizeToFit()
             
             // self.range.min is the current ranges minimum that has been detected
@@ -881,7 +881,7 @@ import UIKit
                 label.attributedText = dataSource?.yLabel(forPlot: plot, atIndex: point)
                 label.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi * Double(dataSource?.yLabelTransformAngle(forPlot: plot) ?? 0) / 180.0))
                 label.sizeToFit()
-                
+
                 label.frame = CGRect(origin: CGPoint(x: plotPoint.x - label.frame.width / 2 + offset.horizontal,
                                                      y: plotPoint.y - label.frame.height + offset.vertical),
                                      size: label.frame.size)
