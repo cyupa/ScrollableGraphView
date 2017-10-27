@@ -51,7 +51,14 @@ class ViewController: UIViewController, ScrollableGraphViewDataSource {
     
     // Implementation for ScrollableGraphViewDataSource protocol
     // #########################################################
-    
+
+    // jmj - Datum Support
+    // #####################
+
+    func datum(forIndex index: Int) -> Any? {
+        return nil
+    }
+
     // You would usually only have a couple of cases here, one for each
     // plot you want to display on the graph. However as this is showing
     // off many graphs with different plots, we are using one big switch
@@ -335,8 +342,9 @@ class ViewController: UIViewController, ScrollableGraphViewDataSource {
         barPlot.fillType = ScrollableGraphViewFillType.solid
         barPlot.fillColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.1)
         
-        barPlot.adaptAnimationType = ScrollableGraphViewAnimationType.elastic
-        barPlot.animationDuration = 1.5
+        barPlot.adaptAnimationType = ScrollableGraphViewAnimationType.easeOut
+        barPlot.animationDuration = 0.25
+        barPlot.shouldRoundBarCorners = true
         
         // Setup the reference lines
         let referenceLines = ReferenceLines()

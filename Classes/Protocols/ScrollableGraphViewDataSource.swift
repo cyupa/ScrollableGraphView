@@ -5,7 +5,9 @@ public protocol ScrollableGraphViewDataSource {
 
     func numberOfPoints() -> Int
     func value(forPlot plot: Plot, atIndex pointIndex: Int) -> Double
-    
+    // jmj - Datum Support
+    func datum(forIndex index: Int) -> Any?
+
     func xLabel(atIndex pointIndex: Int) -> String
     func yLabel(forPlot plot: Plot, atIndex pointIndex: Int) -> NSAttributedString?
     func yLabelOffset(forPlot plot: Plot) -> UIOffset?

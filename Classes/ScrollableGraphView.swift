@@ -48,7 +48,7 @@ import UIKit
     @IBInspectable open var rangeMin: Double = 0
     /// The maximum value for the y-axis. This is ignored when shouldAutomaticallyDetectRange or shouldAdaptRange = true
     @IBInspectable open var rangeMax: Double = 100
-    
+
     // Adapting & Animations
     // #####################
     
@@ -426,7 +426,14 @@ import UIKit
     public func listOfPlots() -> [Plot] {
         return plots
     }
-    
+
+    // jmj - Datum Support
+    // #####################
+
+    public func datum(forIndex index: Int) -> Any? {
+        return self.dataSource?.datum(forIndex: index)
+    }
+
     public func addPlot(plot: Plot) {
         if self.plots.index(where: { (currentPlot) -> Bool in
             return currentPlot.identifier == plot.identifier

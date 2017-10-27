@@ -156,7 +156,7 @@ open class Plot {
             let value = range.min
             
             let position = graphViewDrawingDelegate.calculatePosition(atIndex: i, value: value)
-            let point = GraphPoint(position: position)
+            let point = GraphPoint(position: position, index: i)
             graphPoints.append(point)
         }
     }
