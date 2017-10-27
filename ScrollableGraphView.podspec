@@ -6,7 +6,8 @@ s.description      = "An adaptive scrollable graph view for iOS to visualise sim
 s.homepage         = "https://github.com/wildthink/Scrollable-GraphView"
 s.license          = 'MIT'
 s.author           = { "wildthink" => "box14@jasonjobe.com" }
-s.source           = { :git => "https://github.com/wildthink/ScrollableGraphView.git", :tag => s.version.to_s }
+# s.source           = { :git => "https://github.com/wildthink/ScrollableGraphView.git", :tag => s.version.to_s }
+s.source           = { :git => "https://github.com/wildthink/ScrollableGraphView.git" }
 s.platform     = :ios, '8.0'
 s.requires_arc = true
 
