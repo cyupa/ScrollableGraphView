@@ -21,7 +21,7 @@
 		299482F41F060FE0007BCDCA /* ScrollableGraphViewDrawingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 299482F31F060FE0007BCDCA /* ScrollableGraphViewDrawingDelegate.swift */; };
 		299482F71F06931F007BCDCA /* GraphPointAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 299482F61F06931F007BCDCA /* GraphPointAnimation.swift */; };
 		299482F91F069337007BCDCA /* GraphPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 299482F81F069337007BCDCA /* GraphPoint.swift */; };
-		29A2477C1F09ECE400F75511 /* LabelPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A2477B1F09ECE400F75511 /* LabelPool.swift */; };
+		29A2477C1F09ECE400F75511 /* TextLabelPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A2477B1F09ECE400F75511 /* TextLabelPool.swift */; };
 		29A2477E1F09ED4E00F75511 /* ReferenceLines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A2477D1F09ED4E00F75511 /* ReferenceLines.swift */; };
 		29A5903C1F05030F004D219C /* ScrollableGraphViewDrawingLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A5903B1F05030F004D219C /* ScrollableGraphViewDrawingLayer.swift */; };
 		29A5903E1F05035F004D219C /* BarDrawingLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A5903D1F05035F004D219C /* BarDrawingLayer.swift */; };
@@ -31,6 +31,8 @@
 		29A590461F0503BD004D219C /* ReferenceLineDrawingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A590451F0503BD004D219C /* ReferenceLineDrawingView.swift */; };
 		29A590481F05049F004D219C /* LineDrawingLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A590471F05049F004D219C /* LineDrawingLayer.swift */; };
 		29A5904B1F0509C0004D219C /* Plot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A5904A1F0509C0004D219C /* Plot.swift */; };
+		D603F4481FEA7AFD009BE83A /* ViewLabelPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = D603F4471FEA7AFD009BE83A /* ViewLabelPool.swift */; };
+		D603F44A1FEA7B84009BE83A /* LabelPoolProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D603F4491FEA7B84009BE83A /* LabelPoolProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,7 +52,7 @@
 		299482F31F060FE0007BCDCA /* ScrollableGraphViewDrawingDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ScrollableGraphViewDrawingDelegate.swift; path = ../../Classes/Protocols/ScrollableGraphViewDrawingDelegate.swift; sourceTree = "<group>"; };
 		299482F61F06931F007BCDCA /* GraphPointAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphPointAnimation.swift; path = ../../Classes/Plots/Animation/GraphPointAnimation.swift; sourceTree = "<group>"; };
 		299482F81F069337007BCDCA /* GraphPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphPoint.swift; path = ../../Classes/Plots/Animation/GraphPoint.swift; sourceTree = "<group>"; };
-		29A2477B1F09ECE400F75511 /* LabelPool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LabelPool.swift; path = ../../Classes/Reference/LabelPool.swift; sourceTree = "<group>"; };
+		29A2477B1F09ECE400F75511 /* TextLabelPool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TextLabelPool.swift; path = ../../Classes/Reference/TextLabelPool.swift; sourceTree = "<group>"; };
 		29A2477D1F09ED4E00F75511 /* ReferenceLines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReferenceLines.swift; path = ../../Classes/Reference/ReferenceLines.swift; sourceTree = "<group>"; };
 		29A5903B1F05030F004D219C /* ScrollableGraphViewDrawingLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ScrollableGraphViewDrawingLayer.swift; path = ../../Classes/Drawing/ScrollableGraphViewDrawingLayer.swift; sourceTree = "<group>"; };
 		29A5903D1F05035F004D219C /* BarDrawingLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BarDrawingLayer.swift; path = ../../Classes/Drawing/BarDrawingLayer.swift; sourceTree = "<group>"; };
@@ -60,6 +62,8 @@
 		29A590451F0503BD004D219C /* ReferenceLineDrawingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReferenceLineDrawingView.swift; path = ../../Classes/Drawing/ReferenceLineDrawingView.swift; sourceTree = "<group>"; };
 		29A590471F05049F004D219C /* LineDrawingLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LineDrawingLayer.swift; path = ../../Classes/Drawing/LineDrawingLayer.swift; sourceTree = "<group>"; };
 		29A5904A1F0509C0004D219C /* Plot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Plot.swift; path = ../../Classes/Plots/Plot.swift; sourceTree = "<group>"; };
+		D603F4471FEA7AFD009BE83A /* ViewLabelPool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewLabelPool.swift; path = ../../Classes/Reference/ViewLabelPool.swift; sourceTree = "<group>"; };
+		D603F4491FEA7B84009BE83A /* LabelPoolProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LabelPoolProtocol.swift; path = ../../Classes/Protocols/LabelPoolProtocol.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +133,7 @@
 		299482F01F060F72007BCDCA /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
+				D603F4491FEA7B84009BE83A /* LabelPoolProtocol.swift */,
 				299482F11F060FB5007BCDCA /* ScrollableGraphViewDataSource.swift */,
 				299482F31F060FE0007BCDCA /* ScrollableGraphViewDrawingDelegate.swift */,
 			);
@@ -148,7 +153,8 @@
 			isa = PBXGroup;
 			children = (
 				29A2477D1F09ED4E00F75511 /* ReferenceLines.swift */,
-				29A2477B1F09ECE400F75511 /* LabelPool.swift */,
+				29A2477B1F09ECE400F75511 /* TextLabelPool.swift */,
+				D603F4471FEA7AFD009BE83A /* ViewLabelPool.swift */,
 			);
 			name = Reference;
 			sourceTree = "<group>";
@@ -206,7 +212,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0920;
 				TargetAttributes = {
 					2918399D1C72E6A400753A45 = {
 						CreatedOnToolsVersion = 7.2.1;
@@ -263,10 +269,12 @@
 				299482F71F06931F007BCDCA /* GraphPointAnimation.swift in Sources */,
 				299482EB1F060CBE007BCDCA /* LinePlot.swift in Sources */,
 				299482F91F069337007BCDCA /* GraphPoint.swift in Sources */,
+				D603F4481FEA7AFD009BE83A /* ViewLabelPool.swift in Sources */,
 				299482EF1F060CEA007BCDCA /* BarPlot.swift in Sources */,
 				299482F41F060FE0007BCDCA /* ScrollableGraphViewDrawingDelegate.swift in Sources */,
 				299482F21F060FB5007BCDCA /* ScrollableGraphViewDataSource.swift in Sources */,
-				29A2477C1F09ECE400F75511 /* LabelPool.swift in Sources */,
+				29A2477C1F09ECE400F75511 /* TextLabelPool.swift in Sources */,
+				D603F44A1FEA7B84009BE83A /* LabelPoolProtocol.swift in Sources */,
 				291839A41C72E6A400753A45 /* ViewController.swift in Sources */,
 				29559B801C742D7800E77931 /* UIColor+colorFromHex.swift in Sources */,
 				299482ED1F060CDC007BCDCA /* DotPlot.swift in Sources */,
@@ -304,14 +312,20 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -339,6 +353,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -350,14 +365,20 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -378,6 +399,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

@@ -39,7 +39,7 @@ open class Plot {
     
     // Data Labels
     private(set) var yLabelsView = UIView()
-    private(set) var yLabelPool = LabelPool()
+    private(set) var yLabelPool = TextLabelPool()
     
     deinit {
         displayLink?.invalidate()
@@ -237,18 +237,18 @@ open class Plot {
     }
 }
 
-@objc public enum ScrollableGraphViewAnimationType : Int {
+public enum ScrollableGraphViewAnimationType : Int {
     case easeOut
     case elastic
     case custom
 }
 
-@objc public enum ScrollableGraphViewFillType : Int {
+public enum ScrollableGraphViewFillType : Int {
     case solid
     case gradient
 }
 
-@objc public enum ScrollableGraphViewGradientType : Int {
+public enum ScrollableGraphViewGradientType : Int {
     case linear
     case radial
 }

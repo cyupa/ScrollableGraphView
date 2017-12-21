@@ -9,6 +9,7 @@ public protocol ScrollableGraphViewDataSource {
     func datum(forIndex index: Int) -> Any?
 
     func xLabel(atIndex pointIndex: Int) -> String
+    func xLabelImage(atIndex pointIndex: Int) -> UIImage?
     func yLabel(forPlot plot: Plot, atIndex pointIndex: Int) -> NSAttributedString?
     func yLabelOffset(forPlot plot: Plot) -> UIOffset?
     /// An affine transformation matrix for use in drawing 2D graphics.

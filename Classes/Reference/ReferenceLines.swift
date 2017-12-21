@@ -81,17 +81,17 @@ open class ReferenceLines {
 }
 
 
-@objc public enum ScrollableGraphViewReferenceLinePosition : Int {
+public enum ScrollableGraphViewReferenceLinePosition : Int {
     case left
     case right
     case both
 }
 
-@objc public enum ReferenceLinePositioningType : Int {
+public enum ReferenceLinePositioningType : Int {
     case relative
     case absolute
 }
 
-@objc public enum ScrollableGraphViewReferenceLineType : Int {
+public enum ScrollableGraphViewReferenceLineType : Int {
     case cover
 }

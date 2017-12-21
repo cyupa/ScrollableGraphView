@@ -2,7 +2,7 @@ import UIKit
 
 // MARK: - ScrollableGraphView
 @IBDesignable
-@objc open class ScrollableGraphView: UIScrollView, UIScrollViewDelegate, ScrollableGraphViewDrawingDelegate {
+open class ScrollableGraphView: UIScrollView, UIScrollViewDelegate, ScrollableGraphViewDrawingDelegate {
     
     // MARK: - Public Properties
     // Use these to customise the graph.
@@ -96,7 +96,7 @@ import UIKit
     
     // Labels
     private var xLabelsView = UIView()
-    private var xLabelPool = LabelPool()
+    private var xLabelPool = ViewLabelPool()
     
     // Data Source
     open var dataSource: ScrollableGraphViewDataSource? {
@@ -508,7 +508,8 @@ import UIKit
     private func addReferenceLinesToGraph(referenceLines: ReferenceLines) {
         self.referenceLines = referenceLines
         addReferenceViewDrawingView()
-        
+
+        updateYLabelsForCurrentInterval()
         updateXLabelsForCurrentInterval()
     }
     
@@ -841,10 +842,12 @@ import UIKit
         // Grab an unused label and update it to the right position for the newly activated poitns
         for point in activatedPoints {
             let label = xLabelPool.activateLabel(forPointIndex: point)
-            label.text = dataSource?.xLabel(atIndex: point) ?? ""
-            label.textColor = ref.dataPointLabelColor
-            label.font = ref.dataPointLabelFont
-            label.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi * Double(ref.dataPointLabelAngle) / 180.0))
+            label.label.text = dataSource?.xLabel(atIndex: point) ?? ""
+            label.imageView.image = dataSource?.xLabelImage(atIndex: point)
+            
+            label.label.textColor = ref.dataPointLabelColor
+            label.label.font = ref.dataPointLabelFont
+//            label.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi * Double(ref.dataPointLabelAngle) / 180.0))
 
             label.sizeToFit()
             
@@ -894,7 +897,7 @@ import UIKit
     
     private func updateLabelsForCurrentInterval() {
         updateXLabelsForCurrentInterval()
-        updateXLabelsForCurrentInterval()
+        updateYLabelsForCurrentInterval()
     }
     
     private func updateXLabelsForCurrentInterval() {
@@ -1033,7 +1036,7 @@ import UIKit
 // MARK: - ScrollableGraphView Settings Enums
 // ##########################################
 
-@objc public enum ScrollableGraphViewDirection : Int {
+public enum ScrollableGraphViewDirection : Int {
     case leftToRight
     case rightToLeft
 }

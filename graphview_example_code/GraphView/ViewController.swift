@@ -100,9 +100,16 @@ class ViewController: UIViewController, ScrollableGraphViewDataSource {
         // Ensure that you have a label to return for the index
         return xAxisLabels[pointIndex]
     }
+
+    func xLabelImage(atIndex pointIndex: Int) -> UIImage? {
+        return UIImage(named: "Icon-App-40x40")
+    }
     
     func yLabel(forPlot plot: Plot, atIndex pointIndex: Int) -> NSAttributedString? {
-        return NSAttributedString(string: String(self.value(forPlot: plot, atIndex: pointIndex)))
+        let text = String(self.value(forPlot: plot, atIndex: pointIndex))
+        let string = NSMutableAttributedString(string: text)
+        string.addAttribute(.foregroundColor, value: UIColor.white, range: NSRange.init(location: 0, length: text.count))
+        return string
     }
     
     func yLabelOffset(forPlot plot: Plot) -> UIOffset? {
@@ -267,6 +274,7 @@ class ViewController: UIViewController, ScrollableGraphViewDataSource {
     // Reference lines are positioned absolutely. will appear at specified values on y axis
     fileprivate func createDarkGraph(_ frame: CGRect) -> ScrollableGraphView {
         let graphView = ScrollableGraphView(frame: frame, dataSource: self)
+        graphView.bottomMargin = 40.0
         graphView.direction = .rightToLeft
         graphView.shouldDrawFullScreenLayers = false
         
@@ -291,21 +299,22 @@ class ViewController: UIViewController, ScrollableGraphViewDataSource {
         
         linePlot.adaptAnimationType = ScrollableGraphViewAnimationType.elastic
         
-//        let dotPlot = DotPlot(identifier: "darkLineDot") // Add dots as well.
-//        dotPlot.dataPointSize = 2
-//        dotPlot.dataPointFillColor = UIColor.white
-//        
-//        dotPlot.adaptAnimationType = ScrollableGraphViewAnimationType.elastic
+        let dotPlot = DotPlot(identifier: "darkLineDot") // Add dots as well.
+        dotPlot.dataPointSize = 2
+        dotPlot.dataPointFillColor = UIColor.white
+
+        dotPlot.adaptAnimationType = ScrollableGraphViewAnimationType.elastic
 
         // Setup the reference lines.
         let referenceLines = ReferenceLines()
         referenceLines.shouldShowReferenceLines = false
         referenceLines.shouldShowLabels = true
-        referenceLines.dataPointLabelColor = UIColor.white
+        referenceLines.dataPointLabelColor = UIColor.red
+        referenceLines.dataPointLabelFont = UIFont.systemFont(ofSize: 14.0)
         referenceLines.dataPointLabelAngle = 270
         referenceLines.dataPointLabelBottomMargin = 0
         referenceLines.dataPointLabelTopMargin = 20
-        
+
         // Setup the graph
         graphView.backgroundFillColor = UIColor.colorFromHex(hexString: "#333333")
         graphView.dataPointSpacing = 80
@@ -320,8 +329,8 @@ class ViewController: UIViewController, ScrollableGraphViewDataSource {
         // Add everything to the graph.
         graphView.addReferenceLines(referenceLines: referenceLines)
         graphView.addPlot(plot: linePlot)
-//        graphView.addPlot(plot: dotPlot)
-        
+        graphView.addPlot(plot: dotPlot)
+
         return graphView
     }
     

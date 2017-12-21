@@ -126,7 +126,7 @@ open class LinePlot : Plot {
     }
 }
 
-@objc public enum ScrollableGraphViewLineStyle : Int {
+public enum ScrollableGraphViewLineStyle : Int {
     case straight
     case smooth
 }
